@@ -35,8 +35,7 @@ This repository is a **public, sanitized showcase** of a private project that or
 
 | Lead Pipeline | AI Caller Flow |
 |---------------|----------------|
-| ![Lead Pipeline](diagrams/diagram-export-11-28-2025-4_32_18-AMREV.png) | ![AI Caller Flow](diagrams/ai-caller-flow-v1.png) |
-
+| ![Lead Pipeline](diagrams/diagram-export-11-28-2025-4_32_18-AMREV.png) | ![AI Caller Flow](diagrams/diagram-export-11-28-2025-5_07_28-AMREV.png) |
 Additional diagrams (planned):
 
 - `diagrams/data-model-overview-v1.png` – contacts, accounts, activities, call logs, and appointments

@@ -1,0 +1,6 @@
+# Ignore non-final diagram exports
+diagrams/diagram-export-*-AM.png
+diagrams/diagram-export-*-AM.svg
+
+# Ignore Affinity Publisher source files
+diagrams/*.afpub

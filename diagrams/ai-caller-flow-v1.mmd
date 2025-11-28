@@ -1,0 +1,114 @@
+flowchart LR
+    %% ===== AI CALLER FLOW (ZOOMED-IN) =====
+    %% Focus: one call session from "ready lead" -> AI script -> agent -> dialer -> outcomes -> CRM/calendar -> feedback
+
+    %% ---------- READY LEAD QUEUE ----------
+    subgraph Q[Ready-to-call queue]
+        Q1[Qualified lead\n(ready status)]
+        Q2[Calling priority\n& time window]
+    end
+
+    %% ---------- CONTEXT GATHERING ----------
+    subgraph X[Context loading]
+        X1[Load lead record]
+        X2[Fetch recent\nactivities & notes]
+        X3[Select playbook\n(based on segment)]
+    end
+
+    %% ---------- AI SCRIPT ENGINE ----------
+    subgraph S[AI script engine]
+        S1[Build prompt\n(goal + tone + context)]
+        S2[LLM call to\nOpenAI / local model]
+        S3[Structured call script\n(opening, pitch, questions)]
+        S4[Objection handling\nsnippets + branches]
+    end
+
+    %% ---------- AGENT VIEW ----------
+    subgraph V[Agent call view]
+        V1[Unified screen:\nlead + script + key facts]
+        V2[Dynamic guidance\n(contextual tips)]
+        V3[Live notes\nand tags]
+        V4[Disposition buttons:\nQualified / Nurture / Disqualified]
+    end
+
+    %% ---------- DIALER ----------
+    subgraph D[Dialer session]
+        D1[Start call\n(auto/manual dial)]
+        D2[Connected\n(voice channel)]
+        D3[End / transfer\n(call outcome)]
+    end
+
+    %% ---------- POST-CALL AUTOMATION ----------
+    subgraph A[Post-call automation]
+        A1[Save call log\n(outcome + notes)]
+        A2[Create follow-up tasks\n(email/SMS/call)]
+        A3[Book or update\ncalendar meeting]
+        A4[Update CRM deal\nstage & owner]
+    end
+
+    %% ---------- ANALYTICS & FEEDBACK ----------
+    subgraph R[Feedback loop]
+        R1[Update call KPIs\n(CRR, talk time, outcomes)]
+        R2[Evaluate script\nperformance vs segment]
+        R3[Adjust scoring,\nprompts & playbooks]
+    end
+
+    %% ---------- N8N WORKFLOWS ----------
+    subgraph W[n8n orchestration]
+        W1[02_ai_calling\n(call session flow)]
+        W2[03_qualification_booking\n(booking rules)]
+        W3[04_followup\n(sequence logic)]
+    end
+
+    %% ===== FLOW ARROWS =====
+
+    %% Queue -> Context
+    Q1 --> Q2
+    Q2 --> X1
+    X1 --> X2
+    X2 --> X3
+
+    %% Context -> AI script
+    X3 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+
+    %% AI script -> Agent view
+    S3 --> V1
+    S4 --> V2
+
+    %% Agent view -> Dialer
+    V1 --> D1
+    D1 --> D2
+    D2 --> D3
+    D3 --> V3
+
+    %% Agent view -> Disposition & automation
+    V3 --> V4
+    V4 --> A1
+    A1 --> A2
+    A1 --> A3
+    A1 --> A4
+
+    %% Automation -> Feedback
+    A1 --> R1
+    A2 --> R1
+    A3 --> R1
+    A4 --> R1
+    R1 --> R2
+    R2 --> R3
+
+    %% Feedback back into system
+    R3 --> X3
+    R3 --> S1
+
+    %% n8n hooks (dashed)
+    W1 -. start/close call session .- Q1
+    W1 -. drive script calls .- S2
+    W2 -. booking rules .- A3
+    W3 -. follow-up sequences .- A2
+
+    %% Style to match first diagram
+    classDef layer fill:#f9f9f9,stroke:#cccccc,stroke-width:1px;
+    class Q,X,S,V,D,A,R,W layer;

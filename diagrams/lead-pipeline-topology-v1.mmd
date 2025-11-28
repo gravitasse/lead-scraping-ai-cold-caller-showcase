@@ -1,0 +1,141 @@
+flowchart LR
+    %% ===== LAYERS =====
+    %% Sources -> Ingestion -> Enrichment -> LLM -> Outreach -> CRM/Calendar -> Analytics
+
+    %% ---------- LEAD SOURCES ----------
+    subgraph S[Lead Sources]
+        S1[Inbound forms]
+        S2[Uploaded CSV lists]
+        S3[Partner / referral feeds]
+        S4[B2B data providers]
+        S5[Existing CRM export]
+    end
+
+    %% ---------- INGESTION & SCRAPING LAYER ----------
+    subgraph I[Ingestion & Scraping (n8n)]
+        I1[n8n trigger flows]
+        I2[Data normalizer]
+        I3[Scraper / API calls]
+        I4[Deduplication step]
+    end
+
+    %% ---------- ENRICHMENT & SCORING ----------
+    subgraph E[Enrichment & Scoring]
+        E1[Enrichment service\n(3rd-party APIs)]
+        E2[Lead scoring engine]
+        E3[Segmentation rules]
+    end
+
+    %% ---------- DATA STORE ----------
+    subgraph D[Core Data Store]
+        D1[(Leads table)]
+        D2[(Accounts / companies)]
+        D3[(Activities & call logs)]
+        D4[(Campaign configs)]
+    end
+
+    %% ---------- AI CONTENT ENGINE ----------
+    subgraph A[AI Content & Script Engine]
+        A1[Prompt templates]
+        A2[LLM API\n(OpenAI / local)]
+        A3[Script builder\n(call + email + SMS)]
+        A4[Objection handling\nsnippet library]
+    end
+
+    %% ---------- OUTREACH / CALLING ----------
+    subgraph O[Outreach & Calling]
+        O1[Dialer / telephony\nintegration]
+        O2[Agent UI\n(script + notes)]
+        O3[Outcome logger\n(disposition, notes)]
+        O4[Follow-up task creator]
+    end
+
+    %% ---------- CRM / CALENDAR ----------
+    subgraph C[CRM & Calendar Integrations]
+        C1[CRM sync\n(contacts, deals)]
+        C2[Meeting scheduler\n(calendar API)]
+        C3[Deal / opportunity\nupdate flows]
+    end
+
+    %% ---------- ANALYTICS & FEEDBACK ----------
+    subgraph R[Reporting & Feedback]
+        R1[Metrics aggregator]
+        R2[Dashboard / reports]
+        R3[Feedback loop to\nscoring & prompts]
+    end
+
+    %% ---------- ORCHESTRATION LAYER (N8N) ----------
+    subgraph W[n8n Workflow Orchestration]
+        W1[01_lead_scraping\nworkflow]
+        W2[02_ai_calling\nworkflow]
+        W3[03_qualification_booking\nworkflow]
+        W4[04_sms_email_followup\nworkflow]
+        W5[05_reporting_monitoring\nworkflow]
+    end
+
+    %% ===== FLOWS BETWEEN LAYERS =====
+
+    %% Sources -> Ingestion
+    S1 --> I1
+    S2 --> I1
+    S3 --> I1
+    S4 --> I3
+    S5 --> I1
+
+    I1 --> I2
+    I2 --> I3
+    I3 --> I4
+    I4 --> D1
+
+    %% Ingestion workflows connect into orchestration
+    I1 -. triggers .- W1
+    I3 -. scrape steps .- W1
+
+    %% Enrichment & scoring
+    D1 --> E1
+    E1 --> E2
+    E2 --> E3
+    E3 --> D1
+
+    W1 -. enriched lead branch .- E1
+
+    %% AI content engine
+    D1 --> A1
+    A1 --> A2
+    A2 --> A3
+    A3 --> A4
+
+    W2 -. call prep .- A3
+
+    %% Outreach / calling
+    A3 --> O2
+    A4 --> O2
+    O2 --> O1
+    O1 --> O3
+    O3 --> D3
+    O3 --> O4
+
+    W2 -. live call steps .- O1
+    W3 -. qualification rules .- O3
+    W4 -. follow-up flows .- O4
+
+    %% CRM & calendar
+    D1 --> C1
+    D3 --> C1
+    O4 --> C1
+    O4 --> C2
+    C1 --> C3
+
+    %% Analytics & feedback
+    D1 --> R1
+    D3 --> R1
+    C1 --> R1
+    R1 --> R2
+    R2 --> R3
+    R3 --> E2
+    R3 --> A1
+    R3 --> W5
+
+    %% Visual alignment hints (no functional effect)
+    classDef layer fill:#f9f9f9,stroke:#cccccc,stroke-width:1px;
+    class S,I,E,D,A,O,C,R,W layer;
