@@ -35,7 +35,11 @@ This repository is a **public, sanitized showcase** of a private project that or
 
 | Lead Pipeline | AI Caller Flow |
 |---------------|----------------|
-| ![Lead Pipeline](diagrams/lead-pipeline-topology-v1.png) | ![AI Caller Flow](diagrams/ai-caller-flow-v1.png) |
+## 🏗️ Architecture Visuals
+
+| Lead Pipeline | AI Caller Flow |
+|---------------|----------------|
+| ![Lead Pipeline](diagrams/diagram-export-11-28-2025-4_32_18-AMREV.png) | ![AI Caller Flow](diagrams/ai-caller-flow-v1.png) |
 
 Additional diagrams (planned):
 
