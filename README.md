@@ -2,7 +2,7 @@
 
 **Production-ready n8n workflows for automated lead generation, AI outbound calling, qualification, and multi-channel follow-ups.**
 
-> 🚀 **Deployment Status**: Production-ready with stability and security fixes (v1.1.0 - 2025-11-30)
+> 🚀 **Deployment Status**: Production-ready with complete n8n expert audit (v1.2.0 - 2025-11-30)
 
 This repository is a **public, sanitized showcase** of a private project that orchestrates a complete end-to-end sales automation system:
 
@@ -201,15 +201,32 @@ The system consists of **5 interconnected n8n workflows**:
 
 ## 🔒 Production Improvements
 
-### Recent Fixes (v1.1.0 - 2025-11-30)
+### Recent Fixes (v1.2.0 - 2025-11-30)
 
-- ✅ **PostgreSQL Parameter Formatting** - Fixed array format for database queries
-- ✅ **Race Condition Prevention** - Added Wait nodes to ensure data consistency
-- ✅ **SQL Injection Prevention** - Parameterized all raw SQL queries
-- ✅ **Retry Logic** - Added to all external API calls (Apify, Bland.ai, Cal.com)
-- ✅ **Input Validation** - Webhook payload validation to prevent crashes
-- ✅ **Phone/Email Validation** - Regex validation to prevent wasted API calls
-- ✅ **Environment Configuration** - Validation for critical environment variables
+**Complete n8n expert audit identified and fixed 15 critical issues:**
+
+#### Critical Fixes (5)
+- ✅ **SQL Injection Vulnerability** - Parameterized all database queries
+- ✅ **Broken Boolean Logic** - Fixed qualification workflow SQL statements
+- ✅ **Missing Webhook Responses** - Added response nodes to prevent hanging
+- ✅ **Invalid Cal.com API** - Replaced with manual link generation
+- ✅ **Concurrent Calling Bug** - Sequential processing with proper rate limiting
+
+#### Major Fixes (5)
+- ✅ **Missing Database Column** - Added `last_error` column for error logging
+- ✅ **Deployment Script** - Fixed path detection for any directory
+- ✅ **Webhook Handlers** - Fixed missing endpoints (404 errors)
+- ✅ **PostgreSQL Version** - Updated node version for compatibility
+- ✅ **JSON Syntax** - Fixed environment variable expressions
+
+#### Performance Improvements (5)
+- ✅ **Rate Limit Optimization** - Moved to after call execution
+- ✅ **Race Condition** - Added Wait node between INSERT and SELECT
+- ✅ **Environment Validation** - Complete `.env.example` documentation
+- ✅ **Error Handling** - Proper responses on all execution paths
+- ✅ **Documentation** - Comprehensive migration and testing guides
+
+**See [docs/critical-fixes-v1.2.0.md](docs/critical-fixes-v1.2.0.md) for complete details.**
 
 ### Security & Reliability
 
@@ -270,8 +287,9 @@ The full production implementation lives in a **separate private repository**.
 Core docs live in the `docs/` directory:
 
 - [`docs/overview.md`](docs/overview.md) - Detailed system architecture and workflow descriptions
+- [`docs/deployment-summary.md`](docs/deployment-summary.md) - Deployment patterns and best practices
+- [`docs/critical-fixes-v1.2.0.md`](docs/critical-fixes-v1.2.0.md) - **NEW** Complete n8n expert audit results
 - [`docs/workflows.md`](docs/workflows.md) - *(Coming soon)* Deep dive into each of the 5 workflows
-- [`docs/deployment.md`](docs/deployment.md) - *(Coming soon)* Deployment patterns and best practices
 - [`docs/compliance.md`](docs/compliance.md) - *(Coming soon)* TCPA, GDPR, and CAN-SPAM guidelines
 
 ### Key Concepts
