@@ -1,0 +1,10 @@
+# Tell GitHub to treat .mmd files as documentation, not code
+*.mmd linguist-documentation
+
+# Treat markdown files as documentation
+*.md linguist-documentation
+
+# Don't count image files
+*.png linguist-generated
+*.svg linguist-generated
+*.afpub linguist-generated
